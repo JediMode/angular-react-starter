@@ -9,6 +9,9 @@ jobs:
 
     name: Build and Test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./angular
 
     strategy:
       matrix:
@@ -21,7 +24,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-        working-directory: ./angular
       - run: npm install
       - run: npm run build:ci
       - run: npm run test:ci
