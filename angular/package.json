@@ -9,8 +9,8 @@
     "coverage": "ng test --no-watch --code-coverage",
     "serve": "node server",
     "lint": "ng lint",
-    "build:prod": "ng build --prod",
-    "test:prod": "ng test --browsers=ChromeHeadless --watch=false --code-coverage"
+    "build:ci": "ng build --prod --sourceMap=false --base-href /angular-react-starter/angular/",
+    "test:ci": "ng test --watch=false --code-coverage --source-map true"
   },
   "private": true,
   "dependencies": {
