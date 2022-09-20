@@ -6,20 +6,17 @@ on:
 
 jobs:
   build:
-
-    name: Build and Test
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./angular
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
       - name: Cache node modules
         uses: actions/cache@v1
         with:
@@ -27,13 +24,9 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install and npm run build
+      - name: Build
         run: |
-          npm ci
+          npm install
           npm run build:ci
 
   publish-gpr:
@@ -46,9 +39,9 @@ jobs:
       - uses: actions/ckeckout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '16.x'
           registry-url: https://npm.pkg.github.com/
       - run: npm ci
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB.TOKEN}}
